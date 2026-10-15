@@ -1,5 +1,5 @@
 import {describe,expect,it} from 'vitest';
-import {freshState,migrateV1} from '../src/data/store';
+import {backupPayload,parseBackup,validateState,freshState,migrateV1} from '../src/data/store';
 import {accountBalance,goalAllocated,netWorth,simulate,unallocatedCash,cashflow,holdings} from '../src/finance';
 describe('motore finanziario',()=>{
  it('un trasferimento interno non cambia patrimonio',()=>{
@@ -44,5 +44,23 @@ describe('motore finanziario',()=>{
   expect(s.lessons['INV-W01']?.status).toBe('done');
   expect(s.lessons['INV-W24']?.status).toBe('done');
   expect(s.reviews.length).toBe(1);expect(netWorth(s)).toBe(0);
+ });
+
+ it('mantiene le checklist anche per mesi senza consuntivo',()=>{
+  const s=migrateV1({plan:{income:1700},months:{},checks:{'2026-10':{salary:true,mt1:false}}});
+  expect(s.checks['2026-10']).toEqual({salary:true,mt1:false});
+  expect(s.reviews).toHaveLength(0);
+ });
+ it('preserva risparmi storici negativi',()=>{
+  const s=migrateV1({plan:{income:1700},months:{'2026-09':{income:1700,expenses:1900,saving:-200}}});
+  expect(s.reviews[0]?.savingCents).toBe(-20000);
+ });
+ it('rifiuta backup corrotti senza cancellare lo stato',()=>{
+  const s=freshState();expect(validateState(s)).toBe(true);
+  expect(parseBackup(backupPayload(s)).schemaVersion).toBe(2);
+  const bad=backupPayload(s);
+  bad.state.trades=[null as never];
+  expect(()=>parseBackup(bad)).toThrow();
+  expect(()=>migrateV1({fake:true})).toThrow();
  });
 });
