@@ -70,6 +70,37 @@ export function validateState(v:unknown):v is AppState {
  if(!goals.every(x=>isRec(x)&&typeof x.id==='string'&&typeof x.title==='string'&&Number.isSafeInteger(x.targetCents)&&Number(x.targetCents)>=0&&Array.isArray(x.allocations)&&x.allocations.every((a:unknown)=>isRec(a)&&typeof a.accountId==='string'&&Number.isSafeInteger(a.amountCents)&&Number(a.amountCents)>=0)))return false;
  const reviews=v.reviews as Record<string,unknown>[];
  if(!reviews.every(x=>isRec(x)&&typeof x.month==='string'&&/^\d{4}-(0[1-9]|1[0-2])$/.test(x.month)&&Number.isSafeInteger(x.incomeCents)&&Number.isSafeInteger(x.expensesCents)&&Number.isSafeInteger(x.savingCents)))return false;
+
+ const isCents=(n:unknown)=>Number.isSafeInteger(n)&&Math.abs(Number(n))<=1e12;
+ const isText=(n:unknown,max=12000)=>typeof n==='string'&&n.length<=max;
+ const isDate=(n:unknown)=>isText(n,10)&&/^\d{4}-\d{2}-\d{2}$/.test(n as string);
+ const unique=(list:{id:string}[])=>new Set(list.map(x=>x.id)).size===list.length;
+ if(!unique(ac)||!unique(mov)||!unique(goals as {id:string}[]))return false;
+ const ids=new Set(ac.map(a=>a.id));
+ if(!ac.every(a=>isText(a.id,120)&&isText(a.name,80)&&['current','deposit','broker','cash'].includes(String(a.type))&&isCents(a.openingCents)))return false;
+ if(!mov.every(m=>isText(m.id,120)&&isDate(m.date)&&isText(m.note,400)&&isText(m.category,60)&&
+  (m.fromId===undefined||ids.has(String(m.fromId)))&&(m.toId===undefined||ids.has(String(m.toId)))))return false;
+ if(!goals.every(g=>isText(g.id,120)&&isText(g.title,100)&&isCents(g.targetCents)&&isCents(g.monthlyCents)&&Number(g.targetCents)>=0&&Number(g.monthlyCents)>=0&&isText(g.deadline,7)&&
+  ['active','paused','completed'].includes(String(g.status))&&[1,2,3].includes(Number(g.priority))&&
+  (g.allocations as unknown[]).every(a=>isRec(a)&&ids.has(String(a.accountId))&&isCents(a.amountCents)&&Number(a.amountCents)>=0)))return false;
+ const portfolios=v.portfolios as unknown[];
+ if(!portfolios.every(p=>isRec(p)&&isText(p.id,120)&&isText(p.name,80)&&['real','simulation'].includes(String(p.mode))&&(p.mode==='simulation'||ids.has(String(p.cashAccountId)))))return false;
+ if(!unique(portfolios as {id:string}[]))return false;
+ const pids=new Set((portfolios as {id:string}[]).map(p=>p.id));
+ const securities=v.securities as unknown[];
+ if(!securities.every(q=>isRec(q)&&isText(q.id,120)&&isText(q.name,120)&&isText(q.isin,12)))return false;
+ if(!unique(securities as {id:string}[]))return false;
+ const sids=new Set((securities as {id:string}[]).map(q=>q.id));
+ const trades=v.trades as unknown[];
+ if(!trades.every(t=>isRec(t)&&isText(t.id,120)&&pids.has(String(t.portfolioId))&&sids.has(String(t.securityId))&&
+  isDate(t.date)&&['buy','sell'].includes(String(t.side))&&typeof t.quantity==='number'&&Number.isFinite(t.quantity)&&t.quantity>0&&t.quantity<1e10&&isCents(t.unitPriceCents)&&Number(t.unitPriceCents)>=0&&isCents(t.feesCents)&&Number(t.feesCents)>=0))return false;
+ if(!unique(trades as {id:string}[]))return false;
+ if(!(v.prices as unknown[]).every(p=>isRec(p)&&sids.has(String(p.securityId))&&isDate(p.date)&&isCents(p.unitPriceCents)&&Number(p.unitPriceCents)>=0))return false;
+ if(!reviews.every(x=>isText(x.notes,5000)&&isRec(x.checklist)&&(x.closingBalanceCents===null||isCents(x.closingBalanceCents))&&
+  ['manual','transactions'].includes(String(x.source))&&isText(x.updatedAt,80)))return false;
+ if(Object.entries(v.lessons).some(([id,x])=>!/^INV-W(0[1-9]|1[0-9]|2[0-4])$/.test(id)||!isRec(x)||
+  !['todo','doing','review','done'].includes(String(x.status))||!isText(x.notes,12000)||!isText(x.exercise,12000)||(x.quizScore!==null&&(!isCents(x.quizScore)||Number(x.quizScore)<0||Number(x.quizScore)>100))))return false;
+ if(v.legacy!==null&&(!isRec(v.legacy)||!isCents(v.legacy.emergencyCents)||!isCents(v.legacy.investmentsCents)||!isText(v.legacy.note,1000)))return false;
  if(Object.entries(v.checks).some(([month,items])=>!/^\d{4}-(0[1-9]|1[0-2])$/.test(month)||!isRec(items)||Object.values(items).some(v=>typeof v!=='boolean')))return false;
  return true;
 }
