@@ -9,14 +9,15 @@ export const freshState=():AppState=>({
  {id:'goal-emergency',title:'Fondo emergenza',targetCents:300000,deadline:'',monthlyCents:0,priority:1,status:'active',allocations:[]},
  {id:'goal-spain',title:'Possibile trasferimento in Spagna',targetCents:0,deadline:'2029-10',monthlyCents:0,priority:1,status:'active',allocations:[]}
  ],
- portfolios:[],securities:[],trades:[],prices:[],reviews:[],lessons:{},projectUrl:'',legacy:null,
+ portfolios:[],securities:[],trades:[],prices:[],reviews:[],checks:{},lessons:{},projectUrl:'',legacy:null,
  migration:{source:'fresh',migratedAt:new Date().toISOString()}
 });
 export function migrateV1(raw:unknown):AppState {
  if(!raw||typeof raw!=='object')throw Error('Archivio V1 non riconosciuto');
  const v=raw as Record<string,unknown>, p=(v.plan??{}) as Record<string,unknown>;
  const s=freshState();
- const numeric=(v:unknown,fallback:number)=>{try{const n=eurosToCents(v);return Math.max(0,n)}catch{return fallback}};
+ const signed=(v:unknown,fallback:number)=>{try{return eurosToCents(v)}catch{return fallback}};
+ const numeric=(v:unknown,fallback:number)=>Math.max(0,signed(v,fallback));
  s.plan.incomeCents=numeric(p.income,s.plan.incomeCents);
  s.plan.expensesCents=numeric(p.expenses,s.plan.expensesCents);
  s.plan.targetCents=numeric(p.invest,s.plan.targetCents);
@@ -30,8 +31,16 @@ export function migrateV1(raw:unknown):AppState {
    const checks=((v.checks??{}) as Record<string,Record<string,unknown>>)[month]??{};
    const checklist:Record<string,boolean>={};
    for(const [key,value] of Object.entries(checks))if(typeof value==='boolean')checklist[key]=value;
-   const balance=row.balance===''||row.balance==null?null:numeric(row.balance,0);
-   s.reviews.push({month,incomeCents:numeric(row.income,0),expensesCents:numeric(row.expenses,0),savingCents:numeric(row.saving,0),closingBalanceCents:balance,notes:String(row.notes??'').slice(0,5000),checklist,source:'manual',updatedAt:typeof row.updated==='string'?row.updated:new Date().toISOString()});
+   const balance=row.balance===''||row.balance==null?null:signed(row.balance,0);
+   s.reviews.push({month,incomeCents:numeric(row.income,0),expensesCents:numeric(row.expenses,0),savingCents:signed(row.saving,0),closingBalanceCents:balance,notes:String(row.notes??'').slice(0,5000),checklist,source:'manual',updatedAt:typeof row.updated==='string'?row.updated:new Date().toISOString()});
+  }
+ }
+ const oldChecks=v.checks??{};
+ if(oldChecks&&typeof oldChecks==='object'&&!Array.isArray(oldChecks)){
+  for(const [month,items] of Object.entries(oldChecks)){
+   if(!/^\d{4}-(0[1-9]|1[0-2])$/.test(month)||!items||typeof items!=='object'||Array.isArray(items))continue;
+   s.checks[month]={};
+   for(const [key,value] of Object.entries(items))if(typeof value==='boolean')s.checks[month]![key]=value;
   }
  }
  const lessons=v.lessons??{};
@@ -50,7 +59,7 @@ export function validateState(v:unknown):v is AppState {
  if(!isRec(v)||v.schemaVersion!==2||!isRec(v.plan))return false;
  const arr=['accounts','movements','goals','portfolios','securities','trades','prices','reviews'];
  if(!arr.every(k=>Array.isArray(v[k])&&(v[k] as unknown[]).length<=100000))return false;
- if(!isRec(v.lessons)||!isRec(v.migration)||typeof v.projectUrl!=='string'||v.projectUrl.length>2048)return false;
+ if(!isRec(v.lessons)||!isRec(v.checks)||!isRec(v.migration)||typeof v.projectUrl!=='string'||v.projectUrl.length>2048)return false;
  const p=v.plan as Record<string,unknown>;
  if(!['incomeCents','expensesCents','targetCents'].every(k=>Number.isSafeInteger(p[k])&&Number(p[k])>=0))return false;
  const ac=v.accounts as Record<string,unknown>[];
@@ -61,6 +70,7 @@ export function validateState(v:unknown):v is AppState {
  if(!goals.every(x=>isRec(x)&&typeof x.id==='string'&&typeof x.title==='string'&&Number.isSafeInteger(x.targetCents)&&Number(x.targetCents)>=0&&Array.isArray(x.allocations)&&x.allocations.every((a:unknown)=>isRec(a)&&typeof a.accountId==='string'&&Number.isSafeInteger(a.amountCents)&&Number(a.amountCents)>=0)))return false;
  const reviews=v.reviews as Record<string,unknown>[];
  if(!reviews.every(x=>isRec(x)&&typeof x.month==='string'&&/^\d{4}-(0[1-9]|1[0-2])$/.test(x.month)&&Number.isSafeInteger(x.incomeCents)&&Number.isSafeInteger(x.expensesCents)&&Number.isSafeInteger(x.savingCents)))return false;
+ if(Object.entries(v.checks).some(([month,items])=>!/^\d{4}-(0[1-9]|1[0-2])$/.test(month)||!isRec(items)||Object.values(items).some(v=>typeof v!=='boolean')))return false;
  return true;
 }
 function open():Promise<IDBDatabase>{
