@@ -14,7 +14,9 @@ export const freshState=():AppState=>({
 });
 export function migrateV1(raw:unknown):AppState {
  if(!raw||typeof raw!=='object')throw Error('Archivio V1 non riconosciuto');
- const v=raw as Record<string,unknown>, p=(v.plan??{}) as Record<string,unknown>;
+ const v=raw as Record<string,unknown>;
+ if(!v.plan||typeof v.plan!=='object'||Array.isArray(v.plan)||!v.months||typeof v.months!=='object'||Array.isArray(v.months))throw Error('Backup precedente non riconosciuto: mancano piano o storico');
+ const p=v.plan as Record<string,unknown>;
  const s=freshState();
  const signed=(v:unknown,fallback:number)=>{try{return eurosToCents(v)}catch{return fallback}};
  const numeric=(v:unknown,fallback:number)=>Math.max(0,signed(v,fallback));
