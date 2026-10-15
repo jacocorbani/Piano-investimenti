@@ -75,7 +75,7 @@ export function validateState(v:unknown):v is AppState {
  const isText=(n:unknown,max=12000)=>typeof n==='string'&&n.length<=max;
  const isDate=(n:unknown)=>isText(n,10)&&/^\d{4}-\d{2}-\d{2}$/.test(n as string);
  const unique=(list:{id:string}[])=>new Set(list.map(x=>x.id)).size===list.length;
- if(!unique(ac)||!unique(mov)||!unique(goals as {id:string}[]))return false;
+ if(!unique(ac as {id:string}[])||!unique(mov as {id:string}[])||!unique(goals as {id:string}[]))return false;
  const ids=new Set(ac.map(a=>a.id));
  if(!ac.every(a=>isText(a.id,120)&&isText(a.name,80)&&['current','deposit','broker','cash'].includes(String(a.type))&&isCents(a.openingCents)))return false;
  if(!mov.every(m=>isText(m.id,120)&&isDate(m.date)&&isText(m.note,400)&&isText(m.category,60)&&
