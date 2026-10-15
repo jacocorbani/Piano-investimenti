@@ -255,7 +255,7 @@ export class App {
   const total=totalWeeks.filter(w=>this.state.lessons[w.id]?.status==='done').length;
   const lesson=totalWeeks.find(w=>w.id===this.selectedLesson)??totalWeeks[0]!;
   const l=this.state.lessons[lesson.id]??{status:'todo',notes:'',exercise:'',quizScore:null};
-  const quiz=quizzes[lesson.id];
+  const quiz=quizzes[lesson.id]??quizzes['INV-W01']!;
   return '<div class="grid cols-3">'+this.metric('Lezioni completate',total+' / 24',Math.round(total/24*100)+'% del programma')+
   this.metric('Tempo settimanale','3 ore','72 ore complessive')+
   this.metric('Ultimo quiz',l.quizScore===null?'—':l.quizScore+'%','Lezione '+esc(lesson.id))+'</div>'+
