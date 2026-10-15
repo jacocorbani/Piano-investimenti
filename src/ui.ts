@@ -173,7 +173,7 @@ export class App {
   const s=this.state,r=s.reviews.find(m=>m.month===this.selectedMonth),flow=cashflow(s,this.selectedMonth);
   return '<div class="grid cols-2"><section class="card"><h2>Consuntivo e note</h2>'+
    '<form data-form="review" class="form">'+
-   '<label>Mese del controllo<input type="month" name="month" value="'+esc(this.selectedMonth)+'" required></label>'+
+   '<label>Mese del controllo<input type="month" name="month" data-month-picker value="'+esc(this.selectedMonth)+'" required></label>'+
    '<div class="form-2">'+input('income','Entrate reali (€)',r?euro(r.incomeCents):euro(flow.income),'number','min="0" step="0.01"')+
    input('expenses','Spese reali (€)',r?euro(r.expensesCents):euro(flow.expenses),'number','min="0" step="0.01"')+
    input('saving','Risparmio effettivo (€)',r?euro(r.savingCents):euro(flow.income-flow.expenses),'number','step="0.01"')+
@@ -188,7 +188,7 @@ export class App {
    line('Differenza dal target',r?amount(r.savingCents-s.plan.targetCents):'—')+
    '<hr/><p class="muted">Salva il consuntivo per calcolare lo scostamento rispetto al target e tenere traccia delle motivazioni.</p>'+
    '<h3>Checklist</h3>'+
-   ['Entrate verificate','Spese e saldo verificati','Obiettivi ricontrollati','Studio settimanale svolto'].map((c,i)=>'<label class="row" style="margin:10px 0;display:flex"><input type="checkbox" data-check="'+i+'" '+(r?.checklist['check-'+i]?'checked':'')+'>'+c+'</label>').join('')+
+   ['Entrate verificate','Spese e saldo verificati','Obiettivi ricontrollati','Studio settimanale svolto'].map((c,i)=>'<label class="row" style="margin:10px 0;display:flex"><input type="checkbox" data-check="'+i+'" '+(s.checks[this.selectedMonth]?.['check-'+i]?'checked':'')+'>'+c+'</label>').join('')+
    '</section></div>'+
    '<section class="card" style="margin-top:17px"><div class="row between"><h2>Storico consuntivi</h2><button data-action="csv" class="btn secondary">Esporta CSV</button></div>'+
    '<div class="table-wrap"><table><thead><tr><th>Mese</th><th>Entrate</th><th>Spese</th><th>Risparmio</th><th>Scostamento</th><th>Ultima modifica</th></tr></thead><tbody>'+
@@ -343,13 +343,10 @@ export class App {
  private async onChange(event:Event){
   const el=event.target as HTMLInputElement;
   if(el.matches('[data-import]')){await this.importFile(el);return;}
+  if(el.matches('[data-month-picker]')){this.selectedMonth=el.value;this.notice='';this.render();return;}
   if(el.matches('[data-check]')){
    const key='check-'+el.dataset.check;
-   await this.edit(s=>{
-    let r=s.reviews.find(x=>x.month===this.selectedMonth);
-    if(!r){r={month:this.selectedMonth,incomeCents:0,expensesCents:0,savingCents:0,closingBalanceCents:null,notes:'',checklist:{},source:'manual',updatedAt:new Date().toISOString()};s.reviews.push(r)}
-    r.checklist[key]=el.checked;r.updatedAt=new Date().toISOString();
-   });
+   await this.edit(s=>{s.checks[this.selectedMonth]??={};s.checks[this.selectedMonth]![key]=el.checked;const r=s.reviews.find(x=>x.month===this.selectedMonth);if(r){r.checklist={...s.checks[this.selectedMonth]};r.updatedAt=new Date().toISOString();}});
   }
  }
  private async onSubmit(event:Event){
@@ -373,13 +370,13 @@ export class App {
      const id=str(f,'goalId'),accountId=str(f,'accountId'),cents=num(f,'amount');if(cents<0)throw Error('Riserva negativa');
      const current=this.state.goals.find(g=>g.id===id)?.allocations.find(x=>x.accountId===accountId)?.amountCents??0;
      const max=accountBalance(this.state,accountId)-allocatedOnAccount(this.state,accountId)+current;
-     if(cents>max)throw Error('Riserva superiore alla liquidità libera del conto');
+     if(cents>Math.max(0,max))throw Error('Riserva superiore alla liquidità libera del conto');
      await this.edit(s=>{const g=s.goals.find(x=>x.id===id);if(!g)throw Error('Obiettivo non trovato');
       g.allocations=g.allocations.filter(x=>x.accountId!==accountId);if(cents>0)g.allocations.push({accountId,amountCents:cents});});break;
     }
     case 'review':{
      const month=str(f,'month');if(!/^\d{4}-(0[1-9]|1[0-2])$/.test(month))throw Error('Mese non valido');
-     const rawBalance=str(f,'balance'),r:Review={month,incomeCents:num(f,'income'),expensesCents:num(f,'expenses'),savingCents:num(f,'saving'),closingBalanceCents:rawBalance===''?null:num(f,'balance'),notes:str(f,'notes').slice(0,5000),checklist:this.state.reviews.find(x=>x.month===month)?.checklist??{},source:'manual',updatedAt:new Date().toISOString()};
+     const rawBalance=str(f,'balance'),r:Review={month,incomeCents:num(f,'income'),expensesCents:num(f,'expenses'),savingCents:num(f,'saving'),closingBalanceCents:rawBalance===''?null:num(f,'balance'),notes:str(f,'notes').slice(0,5000),checklist:this.state.checks[month]??{},source:'manual',updatedAt:new Date().toISOString()};
      if(r.incomeCents<0||r.expensesCents<0)throw Error('Entrate e spese non possono essere negative');
      this.selectedMonth=month;await this.edit(s=>{s.reviews=s.reviews.filter(x=>x.month!==month);s.reviews.push(r);});break;
     }
