@@ -2,7 +2,7 @@ import Chart from 'chart.js/auto';
 import course from './data/curriculum.json';
 import {quizzes} from './academy/quiz';
 import type {AppPage,AppState,Movement,Trade,Review,Portfolio,LessonProgress} from './types';
-import {accountBalance,allocatedOnAccount,cashTotal,cashflow,centsToEuros,eurosToCents,goalAllocated,holdings,investmentValue,localDate,localMonth,money,netWorth,simulate,uid,unallocatedCash,validateMovement,validateTrade} from './finance';
+import {accountBalance,allocatedOnAccount,cashTotal,cashflow,centsToEuros,eurosToCents,goalAllocated,holdings,investmentValue,localDate,localMonth,money,netWorth,simulate,validDate,uid,unallocatedCash,validateMovement,validateTrade} from './finance';
 import {backupPayload,migrateV1,parseBackup} from './data/store';
 
 type Save=(state:AppState)=>Promise<void>;
@@ -466,4 +466,4 @@ export class App {
   finally{input.value=''}
  }
 }
-function sValidDate(value:string){return /^\d{4}-\d{2}-\d{2}$/.test(value)&&!Number.isNaN(new Date(value).getTime())}
+function sValidDate(value:string){return validDate(value)}

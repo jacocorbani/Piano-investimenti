@@ -1,5 +1,5 @@
 import type { AppState, LessonProgress, Review } from '../types';
-import {eurosToCents,uid} from '../finance';
+import {eurosToCents,uid,validDate,validateMovement,validateTrade} from '../finance';
 const DB='piano-investimenti-v2', STORE='records', KEY='app', OLD='finanzaDashboard';
 export const freshState=():AppState=>({
  schemaVersion:2,
@@ -75,7 +75,7 @@ export function validateState(v:unknown):v is AppState {
 
  const isCents=(n:unknown)=>Number.isSafeInteger(n)&&Math.abs(Number(n))<=1e12;
  const isText=(n:unknown,max=12000)=>typeof n==='string'&&n.length<=max;
- const isDate=(n:unknown)=>isText(n,10)&&/^\d{4}-\d{2}-\d{2}$/.test(n as string);
+ const isDate=(n:unknown)=>isText(n,10)&&validDate(n as string);
  const unique=(list:{id:string}[])=>new Set(list.map(x=>x.id)).size===list.length;
  if(!unique(ac as {id:string}[])||!unique(mov as {id:string}[])||!unique(goals as {id:string}[]))return false;
  const ids=new Set(ac.map(a=>a.id));
@@ -104,6 +104,15 @@ export function validateState(v:unknown):v is AppState {
   !['todo','doing','review','done'].includes(String(x.status))||!isText(x.notes,12000)||!isText(x.exercise,12000)||(x.quizScore!==null&&(!isCents(x.quizScore)||Number(x.quizScore)<0||Number(x.quizScore)>100))))return false;
  if(v.legacy!==null&&(!isRec(v.legacy)||!isCents(v.legacy.emergencyCents)||!isCents(v.legacy.investmentsCents)||!isText(v.legacy.note,1000)))return false;
  if(Object.entries(v.checks).some(([month,items])=>!/^\d{4}-(0[1-9]|1[0-2])$/.test(month)||!isRec(items)||Object.values(items).some(v=>typeof v!=='boolean')))return false;
+ if(v.projectUrl && !/^https:\/\/(chatgpt\.com|chat\.openai\.com)\//i.test(v.projectUrl))return false;
+ if(!['fresh','v1'].includes(String(v.migration.source))||typeof v.migration.migratedAt!=='string'||!Number.isFinite(Date.parse(v.migration.migratedAt)))return false;
+ if(reviews.some(r=>Number(r.incomeCents)<0||Number(r.expensesCents)<0||Object.values(r.checklist as object).some(x=>typeof x!=='boolean')))return false;
+ if(new Set(reviews.map(r=>r.month)).size!==reviews.length)return false;
+ const state=v as unknown as AppState;
+ if(state.movements.some(m=>validateMovement(state,m)!==null))return false;
+ const replay={...state,trades:[]} as AppState;
+ for(const t of [...state.trades].sort((a,b)=>a.date.localeCompare(b.date))){if(validateTrade(replay,t))return false;replay.trades.push(t);}
+ if(state.goals.some(g=>new Set(g.allocations.map(a=>a.accountId)).size!==g.allocations.length))return false;
  return true;
 }
 function open():Promise<IDBDatabase>{

@@ -25,3 +25,11 @@ Branch: `develop-v2` · Pubblicazione GitHub Pages: versione 1 su `main`.
 
 ## Avvertenze
 Il ramo V2 è una versione di sviluppo; non è una piattaforma di trading. Nessun dato reale è nel codice GitHub. Nessun prezzo di mercato viene scaricato automaticamente. L'assistente genera testo ma non comunica direttamente con ChatGPT.
+
+## Revisione 16 ottobre 2026
+
+Base verificata: 3c5d8c4eb324d8e17b9f7bd65a6f789049cb50ab, successiva al commit del documento di consegna. CI originale positiva.
+
+Correzioni verificate: date impossibili, vendita retrodatata senza disponibilità, parametri non finiti del simulatore, ripristino di backup con movimenti semanticamente invalidi, checklist corrotte e URL eseguibili. Aggiunti 14 casi di regressione (25 test complessivi). Test unitari, TypeScript e build Vite superati localmente.
+
+Restano aperti: test browser/IndexedDB e concorrenza dei salvataggi, limiti aggregati degli importi, riconciliazione V1 guidata, prezzi storici e data di valutazione, rendimento realizzato esplicito, valute e collaudo mobile/accessibilità. Non è stata eseguita una revisione esaustiva di tutti i flussi. Nessun rilascio autorizzato.

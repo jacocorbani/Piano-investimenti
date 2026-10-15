@@ -47,3 +47,7 @@ I vecchi valori di fondo emergenza e capitale investito sono importati come valo
 ## Pubblicazione
 
 Non unire `develop-v2` a `main` e non cambiare la configurazione di GitHub Pages prima della verifica dei backup, dell'accessibilità e dei test di navigazione. Lo stato del lavoro è descritto in [docs/V2-STATUS.md](docs/V2-STATUS.md).
+
+## Verifiche di integrità aggiunte il 16 ottobre 2026
+
+Il motore rifiuta date di calendario impossibili e vendite che precedono le quote disponibili. Il ripristino verifica anche la cronologia delle operazioni, i collegamenti ai conti, le checklist e gli URL ChatGPT. Il simulatore rifiuta valori non finiti e tassi netti fuori dominio. La suite comprende 25 test; build TypeScript e Vite verificate. Il collaudo browser e IndexedDB resta da completare prima del rilascio.

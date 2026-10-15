@@ -9,6 +9,7 @@ export const centsToEuros = (n:number) => (n/100).toFixed(2);
 export const localMonth = (date=new Date()) => date.getFullYear()+'-'+String(date.getMonth()+1).padStart(2,'0');
 export const localDate = (date=new Date()) => localMonth(date)+'-'+String(date.getDate()).padStart(2,'0');
 export const uid = () => crypto.randomUUID();
+export const validDate = (value:string) => /^\d{4}-\d{2}-\d{2}$/.test(value) && Number.isFinite(Date.parse(value)) && new Date(value).toISOString().slice(0,10)===value;
 export const byDate = (a:{date:string},b:{date:string})=>a.date.localeCompare(b.date);
 export function accountBalance(s:AppState,id:string):number {
  const acc=s.accounts.find(a=>a.id===id);if(!acc) return 0;
@@ -55,7 +56,7 @@ export function cashflow(s:AppState,month:string){
  };
 }
 export function validateMovement(s:AppState,m:Movement):string|null{
- if(!/^\d{4}-\d{2}-\d{2}$/.test(m.date))return 'Data non valida';
+ if(!validDate(m.date))return 'Data non valida';
  if(!Number.isSafeInteger(m.amountCents)||Math.abs(m.amountCents)>1e12||(m.kind==='adjustment'?m.amountCents===0:m.amountCents<=0))return 'Importo non valido: solo le rettifiche possono essere negative';
  const has=(id?:string)=>!!id&&s.accounts.some(a=>a.id===id);
  if(m.kind==='transfer') {
@@ -65,20 +66,23 @@ export function validateMovement(s:AppState,m:Movement):string|null{
  return null;
 }
 export function validateTrade(s:AppState,t:Trade):string|null{
+ if(!['buy','sell'].includes(t.side))return 'Operazione non valida';
  const p=s.portfolios.find(p=>p.id===t.portfolioId);
  if(!p||!s.securities.some(q=>q.id===t.securityId))return 'Portafoglio o strumento inesistente';
  if(p.mode==='real'&&(!p.cashAccountId||!s.accounts.some(a=>a.id===p.cashAccountId)))return 'Associa un conto liquidità al portafoglio reale';
  if(!Number.isFinite(t.quantity)||t.quantity<=0||t.quantity>1e9)return 'Quantità non valida';
  if(!Number.isSafeInteger(t.unitPriceCents)||t.unitPriceCents<0||!Number.isSafeInteger(t.feesCents)||t.feesCents<0)return 'Prezzo o commissioni non validi';
- if(!/^\d{4}-\d{2}-\d{2}$/.test(t.date))return 'Data non valida';
+ if(!validDate(t.date))return 'Data non valida';
  if(t.side==='sell'){
-  let q=holdings(s,p.id).find(x=>x.securityId===t.securityId)?.quantity??0;
-  if(q+1e-9<t.quantity)return 'Non puoi vendere più quote di quelle possedute';
+  const trades=[...s.trades,t].filter(x=>x.portfolioId===p.id&&x.securityId===t.securityId).sort(byDate);
+  let q=0;
+  for(const trade of trades){q+=trade.side==='buy'?trade.quantity:-trade.quantity;if(q < -1e-9)return 'Vendita superiore alle quote disponibili alla data indicata';}
  }
  return null;
 }
 export interface SimulationInput {initialCents:number;monthlyCents:number;years:number;annualRate:number;inflation:number;annualFee:number;}
 export function simulate(i:SimulationInput) {
+ if(!Object.values(i).every(Number.isFinite)||!Number.isInteger(i.years)||!Number.isSafeInteger(i.initialCents)||!Number.isSafeInteger(i.monthlyCents)||i.initialCents<0||i.monthlyCents<0||i.annualRate-i.annualFee<=-100)throw Error('Parametri non validi');
  if(i.years<1||i.years>60||i.annualRate<=-100||i.inflation<=-100||i.annualFee<0||i.annualFee>100) throw Error('Parametri fuori intervallo');
  const r=Math.pow(1+(i.annualRate-i.annualFee)/100,1/12)-1;
  let total=i.initialCents; const points=[{year:0,totalCents:total,paidCents:total}];let paid=total;
