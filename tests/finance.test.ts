@@ -63,4 +63,11 @@ describe('motore finanziario',()=>{
   expect(()=>parseBackup(bad)).toThrow();
   expect(()=>migrateV1({fake:true})).toThrow();
  });
+ it('rettifica negativa riduce il saldo ma non viene classificata come spesa',()=>{
+  const s=freshState();s.accounts[0]!.openingCents=20000;
+  const adj={id:'adj',date:'2026-10-15',kind:'adjustment' as const,amountCents:-500,toId:'main-cash',category:'',note:'Correzione'};
+  s.movements.push(adj);
+  expect(accountBalance(s,'main-cash')).toBe(19500);
+  expect(cashflow(s,'2026-10')).toEqual({income:0,expenses:0});
+ });
 });

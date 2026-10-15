@@ -56,7 +56,7 @@ export function cashflow(s:AppState,month:string){
 }
 export function validateMovement(s:AppState,m:Movement):string|null{
  if(!/^\d{4}-\d{2}-\d{2}$/.test(m.date))return 'Data non valida';
- if(!Number.isSafeInteger(m.amountCents)||m.amountCents<=0)return 'Inserisci un importo positivo';
+ if(!Number.isSafeInteger(m.amountCents)||Math.abs(m.amountCents)>1e12||(m.kind==='adjustment'?m.amountCents===0:m.amountCents<=0))return 'Importo non valido: solo le rettifiche possono essere negative';
  const has=(id?:string)=>!!id&&s.accounts.some(a=>a.id===id);
  if(m.kind==='transfer') {
   if(!has(m.fromId)||!has(m.toId)||m.fromId===m.toId)return 'Scegli due conti diversi';

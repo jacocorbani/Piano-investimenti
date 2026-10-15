@@ -130,12 +130,12 @@ export class App {
    '<section class="card"><h2>Registra un movimento</h2><form data-form="movement" class="form"><div class="form-2">'+
    '<label>Operazione<select name="kind">'+opt('income','Entrata')+opt('expense','Spesa')+opt('transfer','Trasferimento tra conti')+opt('adjustment','Rettifica saldo')+'</select></label>'+
    input('date','Data',localDate(),'date')+
-   input('amount','Importo (€)','','number','min="0.01" step="0.01"')+
+   input('amount','Importo (€)','','number','step="0.01"')+
    input('category','Categoria','Altro','text','maxlength="60"')+
    '<label>Conto origine (spese e trasferimenti)<select name="fromId">'+opt('','— Nessuno —')+this.accountOptions()+'</select></label>'+
    '<label>Conto destinazione (entrate e trasferimenti)<select name="toId">'+opt('','— Nessuno —')+this.accountOptions()+'</select></label></div>'+
    input('note','Descrizione facoltativa','','text','maxlength="400"')+
-   '<div class="panel-note">Per trasferire denaro da un conto a un altro, seleziona entrambi i conti. Il patrimonio totale rimarrà invariato.</div><button class="btn" type="submit">Salva movimento</button></form></section></div>'+
+   '<div class="panel-note">Per i trasferimenti scegli due conti: il patrimonio resterà invariato. Le rettifiche possono essere positive o negative e non sono entrate né spese.</div><button class="btn" type="submit">Salva movimento</button></form></section></div>'+
    '<section class="card" style="margin-top:17px"><h2>Ultimi movimenti</h2><div class="table-wrap"><table><thead><tr><th>Data</th><th>Tipo</th><th>Importo</th><th>Conto origine</th><th>Destinazione</th><th>Note</th></tr></thead><tbody>'+
    [...s.movements].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,50).map(m=>'<tr><td>'+esc(m.date)+'</td><td>'+esc(m.kind)+'</td><td>'+amount(m.amountCents)+'</td><td>'+esc(s.accounts.find(a=>a.id===m.fromId)?.name??'—')+'</td><td>'+esc(s.accounts.find(a=>a.id===m.toId)?.name??'—')+'</td><td>'+esc(m.note)+'</td></tr>').join('')+
    '</tbody></table></div>'+(s.movements.length===0?'<div class="empty">Ancora nessun movimento.</div>':'')+'</section>';

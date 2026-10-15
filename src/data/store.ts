@@ -67,7 +67,7 @@ export function validateState(v:unknown):v is AppState {
  const ac=v.accounts as Record<string,unknown>[];
  if(!ac.every(x=>isRec(x)&&typeof x.id==='string'&&typeof x.name==='string'&&Number.isSafeInteger(x.openingCents)))return false;
  const mov=v.movements as Record<string,unknown>[];
- if(!mov.every(x=>isRec(x)&&typeof x.id==='string'&&['income','expense','transfer','adjustment'].includes(String(x.kind))&&Number.isSafeInteger(x.amountCents)&&Number(x.amountCents)>0&&typeof x.date==='string'))return false;
+ if(!mov.every(x=>isRec(x)&&typeof x.id==='string'&&['income','expense','transfer','adjustment'].includes(String(x.kind))&&Number.isSafeInteger(x.amountCents)&&(x.kind==='adjustment'?Number(x.amountCents)!==0:Number(x.amountCents)>0)&&typeof x.date==='string'))return false;
  const goals=v.goals as Record<string,unknown>[];
  if(!goals.every(x=>isRec(x)&&typeof x.id==='string'&&typeof x.title==='string'&&Number.isSafeInteger(x.targetCents)&&Number(x.targetCents)>=0&&Array.isArray(x.allocations)&&x.allocations.every((a:unknown)=>isRec(a)&&typeof a.accountId==='string'&&Number.isSafeInteger(a.amountCents)&&Number(a.amountCents)>=0)))return false;
  const reviews=v.reviews as Record<string,unknown>[];
