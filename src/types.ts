@@ -19,7 +19,7 @@ export interface AppState {
   plan:{incomeCents:number; expensesCents:number; targetCents:number};
   accounts:Account[]; movements:Movement[]; goals:Goal[];
   portfolios:Portfolio[]; securities:Security[]; trades:Trade[]; prices:Price[];
-  reviews:Review[]; lessons:Record<string,LessonProgress>;
+  reviews:Review[]; checks:Record<string,Record<string,boolean>>; lessons:Record<string,LessonProgress>;
   projectUrl:string; legacy:LegacyUnreconciled|null;
   migration:{source:'fresh'|'v1'|'backup'; migratedAt:string};
 }
