@@ -1,0 +1,212 @@
+[
+  {
+    "month": "Mese 1",
+    "title": "Imparare a gestire il denaro",
+    "goal": "Prima di investire, distingui risparmio, liquidità e capitale investibile.",
+    "units": [
+      [
+        "Settimana 1 — Che cosa significa investire",
+        "Video (circa 9 min): introduzione agli investimenti. Lettura (45 min): risparmio, investimento e credito. Esercizio (45 min): scrivi perché vuoi investire e quali obiettivi vorresti finanziare.",
+        "https://www.youtube.com/watch?v=cSlr2I1GGiw",
+        "https://economiapertutti.bancaditalia.it/percorsi-formativi/scuola/la-formazione-dei-docenti/corso-online-docenti/risparmio/",
+        "Output: elenco dei tuoi obiettivi finanziari."
+      ],
+      [
+        "Settimana 2 — I quattro pilastri del patrimonio",
+        "Video (circa 37 min): lezione sui quattro pilastri. Lettura: capitoli iniziali della dispensa Educati e Finanziati. Esercizio: separa liquidità corrente, fondo d'emergenza, obiettivi prevedibili e investimenti a lungo termine.",
+        "https://www.youtube.com/watch?v=pxSBZHHQxSM",
+        "https://www.educatiefinanziati.it/DispensaperEducatieFinanziati.pdf",
+        "Output: schema dei quattro pilastri del tuo patrimonio."
+      ],
+      [
+        "Settimana 3 — Interessi, rendimenti e inflazione",
+        "Video (circa 69 min): matematica finanziaria. Lettura: guida e calcolatore dell'interesse. Esercizio: confronta valore nominale e potere d'acquisto di 1.000 € nel tempo.",
+        "https://www.youtube.com/watch?v=gWaU_490Z7A",
+        "https://economiapertutti.bancaditalia.it/calcolatori/calcolatore-dell-interesse/",
+        "Output: esempio scritto di rendimento nominale e potere d'acquisto."
+      ],
+      [
+        "Settimana 4 — Fondo d'emergenza e risparmio programmato",
+        "Video/lettura: conto deposito e investimenti a brevissimo termine, integrati dal portale Banca d'Italia. Esercizio: definisci una riserva di emergenza e stabilisci quali soldi devono restare accessibili.",
+        "https://www.youtube.com/watch?v=BRGIQ57qe5E",
+        "https://economiapertutti.bancaditalia.it/",
+        "Output: obiettivo del fondo d'emergenza e regola di accessibilità."
+      ]
+    ]
+  },
+  {
+    "month": "Mese 2",
+    "title": "Comprendere gli strumenti finanziari",
+    "goal": "Impara che cosa possiedi realmente quando compri un investimento.",
+    "units": [
+      [
+        "Settimana 5 — Azioni",
+        "Video: Educati e Finanziati 12 — Le azioni. Lettura: materiali CONSOB. Esercizio: spiega che cosa rappresenta una quota di un'impresa.",
+        "https://www.youtube.com/watch?v=A2WoYADex_4",
+        "https://www.consob.it/web/investor-education/educazione-finanziaria",
+        "Output: spiegazione con parole tue di azione e azionista."
+      ],
+      [
+        "Settimana 6 — Obbligazioni",
+        "Video: Educati e Finanziati 08 — Investimenti a medio termine. Lettura: risparmio e investimento; studia cedole, scadenza, prezzo e rischio di credito. Esercizio: riassumi i quattro concetti.",
+        "https://www.youtube.com/watch?v=9cE5HNz3UJ4",
+        "https://economiapertutti.bancaditalia.it/",
+        "Output: scheda dei principali rischi di un'obbligazione."
+      ],
+      [
+        "Settimana 7 — Acquisto di obbligazioni",
+        "Video: Educati e Finanziati 09. Lettura: capitoli sulle obbligazioni nella dispensa. Esercizio: distingui cedola e rendimento effettivo con un esempio.",
+        "https://www.youtube.com/watch?v=hudS2AkmpDU",
+        "https://www.educatiefinanziati.it/DispensaperEducatieFinanziati.pdf",
+        "Output: confronto tra cedola e rendimento effettivo."
+      ],
+      [
+        "Settimana 8 — Fondi, ETF, ETC ed ETN",
+        "Video: lezione 13 — Fondi, ETF, ETC ed ETN. Lettura: confronta le caratteristiche dei quattro strumenti nella dispensa. Esercizio: scrivi una definizione per ciascuno.",
+        "https://www.youtube.com/watch?v=8JymHrq-7pE",
+        "https://www.educatiefinanziati.it/DispensaperEducatieFinanziati.pdf",
+        "Output: tabella comparativa di fondi, ETF, ETC ed ETN."
+      ]
+    ]
+  },
+  {
+    "month": "Mese 3",
+    "title": "Capire rischio, rendimento e diversificazione",
+    "goal": "Impara a gestire le perdite possibili e a non prendere decisioni impulsive.",
+    "units": [
+      [
+        "Settimana 9 — I nove errori da evitare",
+        "Video: Educati e Finanziati 10. Il link diretto fornito non è verificato; usa la pagina video di Paolo Coletti per individuare la lezione corretta. Esercizio: scrivi cinque errori da evitare.",
+        "https://www.paolocoletti.com/youtube/",
+        "https://www.educatiefinanziati.it/DispensaperEducatieFinanziati.pdf",
+        "Output: elenco di cinque errori e come prevenirli."
+      ],
+      [
+        "Settimana 10 — Diversificazione",
+        "Video: Banca d'Italia — diversificazione ingenua. Lettura: approfondisci il concetto e i suoi limiti. Esercizio: spiega perché comprare più strumenti simili non elimina necessariamente il rischio.",
+        "https://economiapertutti.bancaditalia.it/video/video-comportamentali/video-1571917821584",
+        "https://www.consob.it/web/investor-education/la-diversificazione",
+        "Output: esempio di diversificazione utile e di falsa diversificazione."
+      ],
+      [
+        "Settimana 11 — Investire non è un gioco",
+        "Lettura guidata CONSOB sul rischio e sui comportamenti d'investimento. Esercizio: simula una perdita di mercato e annota come reagiresti, senza eseguire operazioni reali.",
+        "https://www.consob.it/web/investor-education/investire-non-e-un-gioco",
+        "https://www.consob.it/web/investor-education/educazione-finanziaria",
+        "Output: breve piano personale per evitare decisioni impulsive."
+      ],
+      [
+        "Settimana 12 — Introduzione agli investimenti",
+        "Lettura: guida introduttiva Investor.gov. Esercizio: calcola quanto deve recuperare un capitale dopo una perdita del 10%, 20% e 35%.",
+        "https://www.investor.gov/introduction-investing",
+        "https://www.consob.it/web/investor-education/la-diversificazione",
+        "Output: calcoli di recupero dopo diversi ribassi."
+      ]
+    ]
+  },
+  {
+    "month": "Mese 4",
+    "title": "Imparare a leggere gli ETF",
+    "goal": "Passa dalla teoria alla lettura delle schede informative, senza fretta di comprare.",
+    "units": [
+      [
+        "Settimana 13 — Fondi ed ETF",
+        "Video: Educati e Finanziati 13 — Fondi ed ETF. Lettura: justETF Academy su fondi, indici e gestione passiva. Esercizio: spiega la differenza tra fondo, indice ed ETF.",
+        "https://www.youtube.com/watch?v=8JymHrq-7pE",
+        "https://www.justetf.com/it/academy/",
+        "Output: glossario essenziale di fondi, indici ed ETF."
+      ],
+      [
+        "Settimana 14 — Allocazione di portafoglio e acquisto ETF",
+        "Video: Educati e Finanziati 14. Lettura: capitoli della dispensa su diversificazione e asset allocation. Esercizio: descrivi i criteri che useresti per valutare un ETF, senza sceglierne uno da comprare.",
+        "https://www.youtube.com/watch?v=iHsVnpQE-kI",
+        "https://www.educatiefinanziati.it/DispensaperEducatieFinanziati.pdf",
+        "Output: checklist preliminare per valutare un ETF."
+      ],
+      [
+        "Settimana 15 — Leggere la scheda di un ETF",
+        "Lettura guidata justETF Academy. Studia TER, replica fisica o sintetica, dimensione del fondo, valuta e politica dei dividendi. Esercizio: compila una scheda di valutazione su un ETF scelto solo a scopo didattico.",
+        "https://www.justetf.com/it/academy/",
+        "https://www.justetf.com/it/academy/",
+        "Output: scheda con TER, replica, dimensione, valuta e dividendi."
+      ],
+      [
+        "Settimana 16 — Accumulazione e distribuzione",
+        "Lettura guidata justETF Academy. Esercizio: confronta un ETF ad accumulazione e uno a distribuzione, distinguendo il trattamento dei proventi; crea una scheda di valutazione.",
+        "https://www.justetf.com/it/academy/",
+        "https://www.educatiefinanziati.it/DispensaperEducatieFinanziati.pdf",
+        "Output: confronto neutrale tra accumulazione e distribuzione."
+      ]
+    ]
+  },
+  {
+    "month": "Mese 5",
+    "title": "Costruire una strategia coerente",
+    "goal": "Trasforma le nozioni in un metodo adatto ai tuoi obiettivi e ai tuoi vincoli.",
+    "units": [
+      [
+        "Settimana 17 — Asset allocation",
+        "Video di ripasso: lezione 14 su allocazione e acquisto ETF. Esercizio: spiega come azioni, obbligazioni e liquidità possono avere funzioni diverse in un portafoglio.",
+        "https://www.youtube.com/watch?v=iHsVnpQE-kI",
+        "https://www.educatiefinanziati.it/DispensaperEducatieFinanziati.pdf",
+        "Output: schema delle possibili funzioni delle diverse asset class."
+      ],
+      [
+        "Settimana 18 — Orizzonte temporale",
+        "Esercizio guidato: costruisci tre obiettivi simulati — entro 1 anno, entro 3 anni e oltre 10 anni — e associa a ciascuno i rischi che potresti permetterti. Usa la dispensa come riferimento.",
+        "https://www.educatiefinanziati.it/DispensaperEducatieFinanziati.pdf",
+        "https://www.consob.it/web/investor-education/la-diversificazione",
+        "Output: tabella obiettivo, orizzonte, liquidità e rischio."
+      ],
+      [
+        "Settimana 19 — PAC e versamenti periodici",
+        "Video: perché non siamo tutti milionari con l'interesse composto? Lettura: guide justETF Academy. Esercizio: simula versamenti periodici e annota i limiti delle proiezioni.",
+        "https://www.youtube.com/watch?v=JIVxkL4ZAPI",
+        "https://www.justetf.com/it/academy/",
+        "Output: simulazione PAC con ipotesi esplicite, costi e inflazione da considerare."
+      ],
+      [
+        "Settimana 20 — Previdenza integrativa e fondo ARCO",
+        "Consulta COVIP e analizza il tuo fondo ARCO: contributi, TFR, comparto, costi e vincoli. Esercizio: prepara domande da chiarire prima di modificare scelte previdenziali.",
+        "https://www.covip.it/",
+        "https://www.covip.it/",
+        "Output: checklist personale per analizzare la previdenza integrativa."
+      ]
+    ]
+  },
+  {
+    "month": "Mese 6",
+    "title": "Broker, fiscalità e verifica finale",
+    "goal": "Controlla le condizioni pratiche e dimostra di saper motivare una simulazione.",
+    "units": [
+      [
+        "Settimana 21 — Broker e intermediari",
+        "Studia commissioni, custodia, autorizzazioni e differenza tra regime amministrato e dichiarativo. Parti dai materiali CONSOB. Esercizio: prepara una tabella di confronto, senza aprire un conto per impulso.",
+        "https://www.consob.it/web/investor-education/educazione-finanziaria",
+        "https://www.consob.it/web/investor-education/operatori-finanziari",
+        "Output: griglia per confrontare intermediari e costi."
+      ],
+      [
+        "Settimana 22 — Fiscalità italiana e possibile trasferimento",
+        "Consulta Agenzia delle Entrate per redditi da capitale e plusvalenze. Considera anche quali domande verificare in caso di trasferimento in Spagna e cambio di residenza fiscale; non applicare automaticamente le regole italiane al nuovo Paese.",
+        "https://www.agenziaentrate.gov.it/",
+        "https://www.cnmv.es/Portal/Inversor/Inicio.aspx",
+        "Output: elenco di questioni fiscali da verificare con fonti ufficiali o professionista."
+      ],
+      [
+        "Settimana 23 — Costi e confronto tra prodotti",
+        "Confronta due ETF simulati e due intermediari, considerando commissioni, spread e costi ricorrenti. Usa le schede informative e le condizioni ufficiali. Esercizio: calcola i costi ipotetici su un anno.",
+        "https://www.justetf.com/it/academy/",
+        "https://www.consob.it/web/investor-education/operatori-finanziari",
+        "Output: tabella comparativa dei costi totali."
+      ],
+      [
+        "Settimana 24 — Esame finale",
+        "Crea un portafoglio simulato, spiega ogni scelta, calcola i costi e prova uno scenario con un ribasso del 20%. Verifica le risposte con le fonti istituzionali; nessun acquisto reale è richiesto.",
+        "https://www.consob.it/web/investor-education/",
+        "https://www.educatiefinanziati.it/DispensaperEducatieFinanziati.pdf",
+        "Output: portafoglio simulato motivato, test di drawdown del 20% e lista dei dubbi ancora aperti."
+      ]
+    ]
+  }
+]

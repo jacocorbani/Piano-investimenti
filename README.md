@@ -1,27 +1,53 @@
-# Finanza personale — Dashboard
+# Piano Investimenti 2.0 — versione di sviluppo
 
-Dashboard statica in italiano per consultare il piano finanziario personale, tenere un check mensile, seguire un percorso gratuito di studio sugli investimenti e preparare prompt da usare nel progetto ChatGPT.
+Applicazione web statica personale per finanza e studio degli investimenti. La branch `develop-v2` **non è pubblicata** sul sito GitHub Pages: la versione attuale resta disponibile sulla branch `main`.
 
-## Pubblicazione con GitHub Pages
+## Avviare il progetto in locale
 
-1. Apri **Settings → Pages** nel repository.
-2. In **Build and deployment**, scegli **Deploy from a branch**.
-3. Seleziona `main` e la cartella `/(root)`, poi salva.
-4. Attendi il completamento del deployment indicato nella sezione Pages.
+Richiede Node.js recente (Node 22 consigliato).
 
-La disponibilità di GitHub Pages per un repository privato dipende dal piano GitHub; se non è disponibile, rendi pubblico il repository solo se ti va bene pubblicare il codice del sito. Non inserire mai dati finanziari personali nel codice del repository.
+```bash
+npm install
+npm run dev
+```
 
-## Funzioni
+Per verificare il codice:
 
-- Panoramica del piano e flusso mensile.
-- Parametri modificabili: entrate, spese, target mensile, fondo emergenza e capitale attuale.
-- Check mensile, consuntivo e storico.
-- Percorso di sei mesi, con massimo tre ore di studio a settimana e link a risorse educative gratuite.
-- Generatore di prompt da copiare nel progetto ChatGPT.
-- Backup JSON e storico CSV.
+```bash
+npm test
+npm run build
+```
 
-## Privacy e limiti
+La compilazione Vite usa `/Piano-investimenti/` come base di produzione.
 
-L'app non si collega direttamente a conti bancari, non esegue investimenti e non invia automaticamente dati a ChatGPT. Le informazioni vengono salvate in `localStorage` nel browser/dispositivo; non sono sincronizzate fra dispositivi. Usa la sezione Impostazioni per aggiungere il link al progetto ChatGPT.
+## Funzionalità realizzate in questa prima iterazione
 
-I numeri iniziali sono valori di partenza modificabili: reddito netto mensile €1.700, spese stimate €450 e target risparmio/investimenti €1.000. Le proiezioni sono versamenti cumulati senza rendimenti, costi o inflazione e non sono promesse di risultato.
+- Dashboard con indicatori patrimoniali e grafico dello storico mensile.
+- Conti, saldi iniziali e movimenti (entrata, spesa, trasferimento, rettifica).
+- Obiettivi e riserve virtuali collegate ai conti.
+- Consuntivi mensili, checklist, tabella storica e CSV.
+- Simulazioni a rendimento annuo costante con costi ipotetici e inflazione.
+- Portafogli reali/simulati, operazioni e prezzi inseriti manualmente.
+- Lezioni originali (24 settimane), appunti, esercizi, stati di avanzamento e quiz.
+- Prompt contestuali per ChatGPT da revisionare e copiare.
+- IndexedDB, backup JSON V2 e migrazione conservativa dai dati V1.
+
+## Privacy e migrazione
+
+Tutti i dati restano nel browser, salvo scelta esplicita di copiarli o esportarli. Non vengono trasmessi a broker, ChatGPT o API remote. L'eventuale caricamento di caratteri da Google Fonts dipende dalla disponibilità della rete, senza invio dei dati finanziari.
+
+Al primo avvio la versione 2 cerca la chiave locale `finanzaDashboard` usata dalla versione 1. Se presente, copia e migra i dati in IndexedDB conservando `finanzaDashboard` e creando `finanzaDashboard:before-v2` come copia aggiuntiva nello stesso browser. **Prima di testare la migrazione, esporta un backup JSON della versione 1.**
+
+I vecchi valori di fondo emergenza e capitale investito sono importati come valori da riconciliare, **non** aggiunti al patrimonio netto, per evitare duplicazioni. I vecchi consuntivi rimangono record manuali, non movimenti inventati.
+
+## Limiti dell'anteprima
+
+È un'implementazione iniziale e **non una versione pronta per l'uso finanziario definitivo**: mancano test end-to-end nel browser, riconciliazione guidata dei saldi V1, portafoglio multi-valuta, importazione CSV di movimenti, rapporti rischio-rendimento avanzati, PWA, cifratura dei backup e pubblicazione del sito V2. L'archivio IndexedDB contiene attualmente uno snapshot strutturato dello stato, non tabelle indipendenti per ciascuna entità. Rendimenti e prezzi sono inseriti manualmente, non previsioni o dati di mercato in tempo reale.
+
+## Pubblicazione
+
+Non unire `develop-v2` a `main` e non cambiare la configurazione di GitHub Pages prima della verifica dei backup, dell'accessibilità e dei test di navigazione. Lo stato del lavoro è descritto in [docs/V2-STATUS.md](docs/V2-STATUS.md).
+
+## Verifiche di integrità aggiunte il 16 ottobre 2026
+
+Il motore rifiuta date di calendario impossibili e vendite che precedono le quote disponibili. Il ripristino verifica anche la cronologia delle operazioni, i collegamenti ai conti, le checklist e gli URL ChatGPT. Il simulatore rifiuta valori non finiti e tassi netti fuori dominio. La suite comprende 25 test; build TypeScript e Vite verificate. Il collaudo browser e IndexedDB resta da completare prima del rilascio.
