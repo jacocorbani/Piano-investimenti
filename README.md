@@ -1,6 +1,6 @@
 # Piano Investimenti 2.0 — versione di sviluppo
 
-Applicazione web statica personale per finanza e studio degli investimenti. La branch `develop-v2` **non è pubblicata** sul sito GitHub Pages: la versione attuale resta disponibile sulla branch `main`.
+Applicazione web statica personale per finanza e studio degli investimenti. Lo sviluppo avviene su `develop-v2`. Dopo il merge della PR #1, `main` contiene la V2: per pubblicarla occorre compilare e distribuire `dist`, seguendo [la procedura Pages](docs/PAGES-DEPLOYMENT.md).
 
 ## Avviare il progetto in locale
 
